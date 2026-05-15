@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Production Quality Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+body{
+font-family:'Inter',sans-serif;
+background:linear-gradient(135deg,#050505,#101010,#132018,#ffffff,#f5fff8);
+color:#f8fafc;
+}
+
+.glass{
+background:rgba(10,10,10,0.88);
+border:1px solid rgba(34,197,94,0.15);
+backdrop-filter:blur(14px);
+box-shadow:0 15px 50px rgba(0,0,0,0.45);
+}
+
+.card-hover{
+transition:all .3s ease;
+cursor:pointer;
+}
+
+.card-hover:hover{
+transform:translateY(-5px);
+box-shadow:0 20px 60px rgba(34,197,94,0.15);
+}
+
+.filter-box{
+background:#ffffff;
+color:#111827;
+border:1px solid rgba(148,163,184,0.2);
+transition:all .3s ease;
+}
+
+.filter-box:hover{
+border-color:#22c55e;
+box-shadow:0 0 0 4px rgba(34,197,94,0.12);
+}
+
+.table-row:hover{
+background:rgba(34,197,94,0.05);
+}
+
+.chart-container{
+position:relative;
+height:420px;
+width:100%;
+}
+</style>
+</head>
+<body class="min-h-screen p-6">
+
+<div class="max-w-[1800px] mx-auto space-y-6">
+
+<div class="flex flex-col xl:flex-row justify-between items-center gap-5">
+<div>
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-3xl bg-gradient-to-r from-emerald-500 to-red-500 flex items-center justify-center text-white text-3xl font-black shadow-xl">
+Q
+</div>
+<div>
+<h1 class="text-5xl font-black tracking-tight bg-gradient-to-r from-emerald-400 via-white to-red-500 bg-clip-text text-transparent">
+Production Quality Intelligence
+</h1>
+<p class="text-slate-400 mt-2 text-lg">Advanced Scrap Cost • Root Cause • Yield Analytics Platform</p>
+</div>
+</div>
+</div>
+
+<div class="flex gap-3 flex-wrap">
+<button onclick="openSettings()" class="bg-gradient-to-r from-emerald-500 to-red-500 text-white px-5 py-3 rounded-2xl font-semibold shadow-lg hover:scale-105 transition-all">
+⚙️ Settings
+</button>
+<button class="bg-white text-black px-5 py-3 rounded-2xl shadow-sm border border-slate-200 hover:bg-emerald-50 transition-all">
+Export Report
+</button>
+<button class="bg-white text-black px-5 py-3 rounded-2xl shadow-sm border border-slate-200 hover:bg-red-50 transition-all">
+Live Sync
+</button>
+</div>
+</div>
+
+<div class="glass rounded-3xl p-4">
+<div class="flex flex-wrap gap-3 items-center">
+<select class="filter-box rounded-2xl px-4 py-3 text-sm min-w-[160px]">
+<option>Current Month</option>
+<option>May 2026</option>
+<option>April 2026</option>
+</select>
+
+<select class="filter-box rounded-2xl px-4 py-3 text-sm min-w-[160px]">
+<option>All Lines</option>
+<option>LINE-01</option>
+<option>LINE-02</option>
+<option>LINE-03</option>
+</select>
+
+<select class="filter-box rounded-2xl px-4 py-3 text-sm min-w-[180px]">
+<option>All Shifts</option>
+<option>Morning</option>
+<option>Evening</option>
+<option>Night</option>
+</select>
+
+<input type="text" placeholder="Search Product / Operator" class="filter-box rounded-2xl px-4 py-3 text-sm min-w-[240px]">
+
+<div class="ml-auto flex gap-2 flex-wrap">
+<button class="bg-gradient-to-r from-emerald-500 to-red-500 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-md">
+Overview
+</button>
+<button class="bg-zinc-800 hover:bg-emerald-500 transition-all px-4 py-2 rounded-xl text-sm">Root Cause</button>
+<button class="bg-zinc-800 hover:bg-red-500 transition-all px-4 py-2 rounded-xl text-sm">Machine Quality</button>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+<div class="glass rounded-3xl p-6 card-hover bg-gradient-to-br from-emerald-950 to-black">
+<p class="text-slate-400 text-sm uppercase tracking-widest">MTD Scrap Cost</p>
+<h2 class="text-5xl font-black mt-4 text-emerald-400">₹4.8L</h2>
+<p class="text-emerald-500 mt-3">↓ 12% Improvement</p>
+</div>
+
+<div class="glass rounded-3xl p-6 card-hover bg-gradient-to-br from-red-950 to-black">
+<p class="text-slate-400 text-sm uppercase tracking-widest">Rework Cost</p>
+<h2 class="text-5xl font-black mt-4 text-red-400">₹2.1L</h2>
+<p class="text-red-500 mt-3">15% Rework Rate</p>
+</div>
+
+<div class="glass rounded-3xl p-6 card-hover bg-gradient-to-br from-zinc-900 to-black">
+<p class="text-slate-400 text-sm uppercase tracking-widest">Quality Loss</p>
+<h2 class="text-5xl font-black mt-4 text-white">₹6.9L</h2>
+<p class="text-slate-400 mt-3">Current Month</p>
+</div>
+
+<div class="glass rounded-3xl p-6 card-hover bg-gradient-to-br from-yellow-950 to-black">
+<p class="text-slate-400 text-sm uppercase tracking-widest">Worst Machine</p>
+<h2 class="text-3xl font-black mt-4 text-yellow-400">LINE-03</h2>
+<p class="text-yellow-500 mt-3">Yield 82%</p>
+</div>
+
+<div class="glass rounded-3xl p-6 card-hover bg-gradient-to-br from-emerald-950 to-red-950">
+<p class="text-slate-400 text-sm uppercase tracking-widest">Projected Loss</p>
+<h2 class="text-4xl font-black mt-4 text-red-400">₹11.8L</h2>
+<p class="text-red-500 mt-3">Current Trend</p>
+</div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+<div class="glass rounded-3xl p-6 xl:col-span-7">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="text-3xl font-black text-white">Scrap Cost Waterfall Analysis</h2>
+<p class="text-slate-400 mt-1">Production loss impact distribution</p>
+</div>
+</div>
+<div class="chart-container">
+<canvas id="waterfallChart"></canvas>
+</div>
+</div>
+
+<div class="glass rounded-3xl p-6 xl:col-span-5">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="text-3xl font-black text-white">Shift Rejection Histogram</h2>
+<p class="text-slate-400 mt-1">Rejection spike frequency</p>
+</div>
+</div>
+<div class="chart-container">
+<canvas id="histogramChart"></canvas>
+</div>
+</div>
+
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+<div class="glass rounded-3xl p-6 xl:col-span-8">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="text-3xl font-black text-white">Machine-wise Stacked Analysis</h2>
+<p class="text-slate-400 mt-1">Good output vs rejection vs rework</p>
+</div>
+</div>
+<div class="chart-container">
+<canvas id="stackedChart"></canvas>
+</div>
+</div>
+
+<div class="glass rounded-3xl p-6 xl:col-span-4">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="text-3xl font-black text-white">Pareto Root Cause</h2>
+<p class="text-slate-400 mt-1">Top rejection contributors</p>
+</div>
+</div>
+<div class="chart-container">
+<canvas id="paretoChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="glass rounded-3xl p-6 overflow-auto">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="text-3xl font-black">Production Quality Log</h2>
+<p class="text-slate-400 mt-2">Detailed machine-wise production data</p>
+</div>
+</div>
+
+<table class="w-full min-w-[1400px] text-sm">
+<thead>
+<tr class="border-b border-slate-700 text-slate-400 uppercase text-xs tracking-wider">
+<th class="py-4 text-left">Date</th>
+<th class="py-4 text-left">Shift</th>
+<th class="py-4 text-left">Line</th>
+<th class="py-4 text-left">Product</th>
+<th class="py-4 text-left">Input</th>
+<th class="py-4 text-left">Output</th>
+<th class="py-4 text-left">Rejected</th>
+<th class="py-4 text-left">Rework</th>
+<th class="py-4 text-left">Scrap</th>
+<th class="py-4 text-left">Loss</th>
+<th class="py-4 text-left">Operator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="table-row border-b border-slate-800">
+<td class="py-5">15 May</td>
+<td>Night</td>
+<td>LINE-03</td>
+<td>PRD-442</td>
+<td>2400</td>
+<td>2050</td>
+<td class="text-red-400 font-bold">220</td>
+<td>80</td>
+<td>50</td>
+<td class="text-red-400 font-bold">₹1,24,000</td>
+<td>OPR-104</td>
+</tr>
+
+<tr class="table-row border-b border-slate-800">
+<td class="py-5">15 May</td>
+<td>Morning</td>
+<td>LINE-01</td>
+<td>PRD-112</td>
+<td>3200</td>
+<td>3050</td>
+<td class="text-yellow-400 font-bold">85</td>
+<td>40</td>
+<td>15</td>
+<td class="text-yellow-400 font-bold">₹36,000</td>
+<td>OPR-065</td>
+</tr>
+
+<tr class="table-row border-b border-slate-800">
+<td class="py-5">14 May</td>
+<td>Evening</td>
+<td>LINE-02</td>
+<td>PRD-209</td>
+<td>2800</td>
+<td>2330</td>
+<td class="text-red-500 font-bold">280</td>
+<td>95</td>
+<td>95</td>
+<td class="text-red-500 font-bold">₹1,56,000</td>
+<td>OPR-089</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div id="settingsModal" class="fixed inset-0 bg-black/40 hidden items-center justify-end z-50">
+<div class="w-full max-w-lg h-full bg-zinc-950 p-8 overflow-y-auto shadow-2xl border-l border-emerald-500/10">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-3xl font-black text-white">Dashboard Settings</h2>
+<p class="text-slate-400 mt-1">Configure Sheet Integration</p>
+</div>
+<button onclick="closeSettings()" class="text-2xl text-slate-400">✕</button>
+</div>
+
+<div class="space-y-6">
+<div>
+<label class="text-sm font-semibold text-slate-300 block mb-2">Production Sheet URL</label>
+<input type="text" placeholder="Paste Google Sheet URL" class="w-full border border-slate-700 rounded-2xl px-4 py-3 bg-black text-white">
+</div>
+
+<div>
+<label class="text-sm font-semibold text-slate-300 block mb-2">Production Data Tab</label>
+<input type="text" placeholder="Production_Log" class="w-full border border-slate-700 rounded-2xl px-4 py-3 bg-black text-white">
+</div>
+
+<div>
+<label class="text-sm font-semibold text-slate-300 block mb-2">Target Tab</label>
+<input type="text" placeholder="Product_Targets" class="w-full border border-slate-700 rounded-2xl px-4 py-3 bg-black text-white">
+</div>
+
+<button class="w-full bg-gradient-to-r from-emerald-500 to-red-500 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-[1.02] transition-all">
+Save & Sync Dashboard
+</button>
+</div>
+</div>
+</div>
+
+<script>
+function openSettings(){
+  document.getElementById('settingsModal').classList.remove('hidden');
+  document.getElementById('settingsModal').classList.add('flex');
+}
+
+function closeSettings(){
+  document.getElementById('settingsModal').classList.add('hidden');
+  document.getElementById('settingsModal').classList.remove('flex');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+
+const commonOptions = {
+responsive:true,
+maintainAspectRatio:false,
+plugins:{
+legend:{labels:{color:'#f8fafc'}}
+},
+scales:{
+x:{ticks:{color:'#f8fafc'},grid:{color:'rgba(255,255,255,0.05)'}},
+y:{ticks:{color:'#f8fafc'},grid:{color:'rgba(255,255,255,0.05)'}}
+}
+};
+
+const waterfallCtx = document.getElementById('waterfallChart');
+if(waterfallCtx){
+new Chart(waterfallCtx.getContext('2d'), {
+type:'bar',
+data:{
+labels:['Input','Rework','Machine Scrap','Material Scrap','Operator Error','Net Value'],
+datasets:[{
+label:'₹ Impact',
+data:[850000,-120000,-180000,-95000,-60000,395000],
+backgroundColor:['#22c55e','#eab308','#ef4444','#dc2626','#f97316','#10b981'],
+borderRadius:10
+}]
+},
+options:commonOptions
+});
+}
+
+const histogramCtx = document.getElementById('histogramChart');
+if(histogramCtx){
+new Chart(histogramCtx.getContext('2d'), {
+type:'bar',
+data:{
+labels:['0-2%','2-4%','4-6%','6-8%','8-10%'],
+datasets:[{
+label:'Frequency',
+data:[4,9,16,11,5],
+backgroundColor:'#ef4444',
+borderRadius:10
+}]
+},
+options:commonOptions
+});
+}
+
+const stackedCtx = document.getElementById('stackedChart');
+if(stackedCtx){
+new Chart(stackedCtx.getContext('2d'), {
+type:'bar',
+data:{
+labels:['LINE-01','LINE-02','LINE-03','LINE-04'],
+datasets:[
+{label:'Good Output',data:[82,68,51,74],backgroundColor:'#22c55e'},
+{label:'Rejected',data:[9,14,28,11],backgroundColor:'#ef4444'},
+{label:'Rework',data:[6,10,14,8],backgroundColor:'#eab308'}
+]
+},
+options:{
+...commonOptions,
+scales:{
+x:{stacked:true,ticks:{color:'#f8fafc'},grid:{color:'rgba(255,255,255,0.05)'}},
+y:{stacked:true,ticks:{color:'#f8fafc'},grid:{color:'rgba(255,255,255,0.05)'}}
+}
+}
+});
+}
+
+const paretoCtx = document.getElementById('paretoChart');
+if(paretoCtx){
+new Chart(paretoCtx.getContext('2d'), {
+type:'bar',
+data:{
+labels:['Material Crack','Alignment','Heat Burn','Operator Error','Moisture'],
+datasets:[{
+label:'Rejections',
+data:[420,310,210,160,90],
+backgroundColor:['#22c55e','#84cc16','#eab308','#f97316','#ef4444'],
+borderRadius:10
+}]
+},
+options:{
+...commonOptions,
+indexAxis:'y'
+}
+});
+}
+
+console.log('All charts initialized successfully');
+});
+</script>
+
+</body>
+</html>
